@@ -26,7 +26,7 @@ if TESTING:
     logging.getLogger('').setLevel(logging.ERROR)
 
 DEFAULTS = {
-    "user_agent": 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36',
+    "user_agent": 'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/113.0',
     "origin": "",
     "tempdir": "",
     "concurrency": "5",

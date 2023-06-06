@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # coding=utf-8
-
+#~/.local/lib/python3.10/site-packages/m3u8downloader/
 """download m3u8 file reliably.
 
 Features:
@@ -33,6 +33,8 @@ import m3u8downloader
 import m3u8downloader.configlogger
 from m3u8downloader.config import CONF
 
+#import zlib
+#import gzip
 
 logger = logging.getLogger(__name__)
 SESSION = requests.Session()
@@ -246,6 +248,7 @@ class M3u8Downloader:
         """rewrite fragment url to local relative file path.
 
         """
+        # print(f"[DEBUG] opening file {local_m3u8_filename}")
         with open(local_m3u8_filename, 'r') as f:
             content = f.read()
         with open(local_m3u8_filename, 'w') as f:
@@ -448,9 +451,14 @@ class M3u8Downloader:
 
     def download_m3u8_link(self, url):
         """download video at m3u8 link.
-
+            #Requires master.m3u8 url ; auto-selects best resolution for download
         """
         content = get_url_content(url)
+        # print(content) #debug raw bytes
+        ## content = zlib.decompress(content, 16+zlib.MAX_WBITS) #decompress gzip and alike #https://stackoverflow.com/questions/2695152/in-python-how-do-i-decode-gzip-encoding
+        # content = gzip.decompress(content)
+        # content = str(content,'utf-8')
+        # print(content) #debug decoded
         if "RESOLUTION" in content.decode('utf-8'):
             self.process_master_playlist(url, content)
         else:
@@ -497,6 +505,8 @@ def main():
     signal.signal(signal.SIGTERM, signal_handler)
 
     SESSION.headers.update({'User-Agent': args.user_agent})
+    # SESSION.headers.update({'Accept-Encoding': "identity"})
+    SESSION.headers.update({'Accept-Language': "en-US,en;q=0.5"}) #403 forbidden server check
     if args.origin:
         SESSION.headers.update({'Origin': args.origin})
     tempdir = args.tempdir or os.path.join(get_default_cache_dir(),
