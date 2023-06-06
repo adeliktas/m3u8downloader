@@ -1,6 +1,3 @@
-Source: https://pypi.org/project/m3u8downloader/
-Author: Yuanle Song
-
 m3u8downloader
 ============================
 
